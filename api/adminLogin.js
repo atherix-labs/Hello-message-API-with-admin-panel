@@ -1,14 +1,10 @@
-function getStore() {
-  if (!global.__HELLO_MESSAGE_STORE__) {
-    global.__HELLO_MESSAGE_STORE__ = {
-      title: 'System Announcement',
-      author: 'dagger',
-      message: 'Welcome to Hello Message API.',
-      lastUpdated: new Date().toISOString()
-    };
-  }
-  return global.__HELLO_MESSAGE_STORE__;
-}
+// In-memory test/example data for demonstration
+let exampleData = {
+  title: 'Test Announcement',
+  author: 'dagger',
+  message: 'This is a test/example API message.',
+  lastUpdated: new Date().toISOString()
+};
 
 function isAuthorized(username, password) {
   if (!username || !password) return false;
@@ -40,8 +36,7 @@ export default async function handler(req, res) {
       return res.status(401).json(false);
     }
 
-    const currentModules = getStore();
-    return res.status(200).json(currentModules);
+    return res.status(200).json(exampleData);
   } catch (error) {
     return res.status(500).json(false);
   }
