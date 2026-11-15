@@ -1,14 +1,13 @@
-// Shared serverless state initialization
 function getStore() {
-  if (!global.__ZENO_STORE__) {
-    global.__ZENO_STORE__ = {
+  if (!global.__HELLO_MESSAGE_STORE__) {
+    global.__HELLO_MESSAGE_STORE__ = {
       title: 'System Announcement',
       author: 'dagger',
-      message: 'Welcome to Zeno Innovations API.',
+      message: 'Welcome to Hello Message API.',
       lastUpdated: new Date().toISOString()
     };
   }
-  return global.__ZENO_STORE__;
+  return global.__HELLO_MESSAGE_STORE__;
 }
 
 function isAuthorized(username, password) {
@@ -17,7 +16,6 @@ function isAuthorized(username, password) {
   const validKey = process.env.key;
   const userRole = process.env[username];
 
-  // Checks that password matches process.env.key AND username maps to "admin"
   return Boolean(validKey && password === validKey && userRole === 'admin');
 }
 
