@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zeno Innovations — Admin Dashboard</title>
+  <!-- AthwinUI Stylesheet (with embedded fallback tokens for standalone reliability) -->
+  <link rel="stylesheet" href="https://d-gger.github.io/athwinui/athwin.min.css" onerror="this.remove()" />
+  <style>
+    :root {
+      --aw-bg: #f8fafc;
+      --aw-surface: #ffffff;
+      --aw-surface-alt: #f1f5f9;
+      --aw-border: #e2e8f0;
+      --aw-text: #0f172a;
+      --aw-text-muted: #64748b;
+      --aw-primary: #2563eb;
+      --aw-primary-hover: #1d4ed8;
+      --aw-danger: #ef4444;
+      --aw-success: #10b981;
+      --aw-radius: 10px;
+      --aw-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+    }
+
+    [data-theme="dark"] {
+      --aw-bg: #090d16;
+      --aw-surface: #111827;
+      --aw-surface-alt: #1e293b;
+      --aw-border: #1f2937;
+      --aw-text: #f8fafc;
+      --aw-text-muted: #94a3b8;
+      --aw-primary: #3b82f6;
+      --aw-primary-hover: #60a5fa;
+      --aw-danger: #f87171;
+      --aw-success: #34d399;
+      --aw-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--aw-bg);
+      color: var(--aw-text);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* Navbar */
+    .aw-navbar {
+      background: var(--aw-surface);
+      border-bottom: 1px solid var(--aw-border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .aw-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .aw-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: var(--aw-surface-alt);
+      border: 1px solid var(--aw-border);
+      color: var(--aw-text-muted);
+    }
+
+    .aw-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    /* Layout */
+    .aw-container {
+      width: 100%;
+      max-width: 820px;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem;
+      flex: 1;
+    }
+
+    .aw-login-wrap {
+      max-width: 420px;
+      margin: 4rem auto;
+    }
+
+    /* Cards */
+    .aw-card {
+      background: var(--aw-surface);
+      border: 1px solid var(--aw-border);
+      border-radius: var(--aw-radius);
+      padding: 1.75rem;
+      box-shadow: var(--aw-shadow);
+    }
+
+    .aw-card-header {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--aw-border);
+      padding-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .aw-card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .aw-card-sub {
+      font-size: 0.875rem;
+      color: var(--aw-text-muted);
+    }
+
+    /* Forms & Inputs */
+    .aw-field {
+      margin-bottom: 1.2rem;
+    }
+
+    .aw-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.45rem;
+      color: var(--aw-text);
+    }
+
+    .aw-label span {
+      color: var(--aw-text-muted);
+      font-weight: 400;
+      font-size: 0.78rem;
+    }
+
+    .aw-input,
+    .aw-textarea {
+      width: 100%;
+      background: var(--aw-bg);
+      border: 1px solid var(--aw-border);
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      color: var(--aw-text);
+      font-size: 0.925rem;
+      font-family: inherit;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .aw-input:focus,
+    .aw-textarea:focus {
+      outline: none;
+      border-color: var(--aw-primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+    }
+
+    .aw-input[readonly] {
+      background: var(--aw-surface-alt);
+      color: var(--aw-text-muted);
+      cursor: not-allowed;
+    }
+
+    .aw-textarea {
+      min-height: 115px;
+      resize: vertical;
+    }
+
+    /* Grid for modules */
+    .aw-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .aw-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Buttons */
+    .aw-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.65rem 1.15rem;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .aw-btn-primary {
+      background: var(--aw-primary);
+      color: #ffffff;
+    }
+
+    .aw-btn-primary:hover:not(:disabled) {
+      background: var(--aw-primary-hover);
+    }
+
+    .aw-btn-outline {
+      background: transparent;
+      border-color: var(--aw-border);
+      color: var(--aw-text);
+    }
+
+    .aw-btn-outline:hover:not(:disabled) {
+      background: var(--aw-surface-alt);
+    }
+
+    .aw-btn-block {
+      width: 100%;
+    }
+
+    .aw-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Alerts & Code Preview */
+    .aw-alert {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      margin-bottom: 1.2rem;
+      display: none;
+      border: 1px solid transparent;
+    }
+
+    .aw-alert.show {
+      display: block;
+    }
+
+    .aw-alert-error {
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: var(--aw-danger);
+    }
+
+    .aw-alert-success {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: var(--aw-success);
+    }
+
+    .aw-code-box {
+      margin-top: 1.5rem;
+      background: var(--aw-bg);
+      border: 1px solid var(--aw-border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .aw-code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--aw-text-muted);
+    }
+
+    pre {
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.82rem;
+      overflow-x: auto;
+      color: var(--aw-text);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="aw-navbar">
+    <div class="aw-brand">
+      <span>Zeno Innovations</span>
+      <span class="aw-badge">dashboard.zeno-innovations.com</span>
+    </div>
+    <div class="aw-nav-actions">
+      <button id="themeToggle" class="aw-btn aw-btn-outline" type="button">Light Mode</button>
+      <button id="logoutBtn" class="aw-btn aw-btn-outline hidden" type="button">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="aw-container">
+
+    <!-- LOGIN SECTION -->
+    <section id="loginSection" class="aw-login-wrap">
+      <div class="aw-card">
+        <div class="aw-card-header">
+          <div>
+            <h1 class="aw-card-title">Admin Authentication</h1>
+            <p class="aw-card-sub">Sign in to manage public API message modules.</p>
+          </div>
+        </div>
+
+        <div id="loginAlert" class="aw-alert aw-alert-error"></div>
+
+        <form id="loginForm">
+          <div class="aw-field">
+            <label class="aw-label" for="username">Username</label>
+            <input class="aw-input" type="text" id="username" placeholder="e.g. dagger" autocomplete="username" required />
+          </div>
+
+          <div class="aw-field">
+            <label class="aw-label" for="password">Access Key</label>
+            <input class="aw-input" type="password" id="password" placeholder="Enter admin key" autocomplete="current-password" required />
+          </div>
+
+          <button id="loginSubmit" class="aw-btn aw-btn-primary aw-btn-block" type="submit">
+            Authenticate
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ADMIN PANEL SECTION -->
+    <section id="dashboardSection" class="hidden">
+      <div class="aw-card">
+        <div class="aw-card-header">
+          <div>
+            <h2 class="aw-card-title">API Message Modules</h2>
+            <p class="aw-card-sub">Changes propagate immediately to <code>/api/message</code>.</p>
+          </div>
+          <span id="activeUserBadge" class="aw-badge">Signed in</span>
+        </div>
+
+        <div id="dashAlert" class="aw-alert"></div>
+
+        <form id="controlForm">
+          <div class="aw-grid-2">
+            <div class="aw-field">
+              <label class="aw-label" for="modTitle">
+                Title <span>module: title</span>
+              </label>
+              <input class="aw-input" type="text" id="modTitle" required />
+            </div>
+
+            <div class="aw-field">
+              <label class="aw-label" for="modAuthor">
+                Author <span>module: author</span>
+              </label>
+              <input class="aw-input" type="text" id="modAuthor" required />
+            </div>
+          </div>
+
+          <div class="aw-field">
+            <label class="aw-label" for="modMessage">
+              Message Content <span>module: message</span>
+            </label>
+            <textarea class="aw-textarea" id="modMessage" required></textarea>
+          </div>
+
+          <div class="aw-field">
+            <label class="aw-label" for="modLastUpdated">
+              Last Updated <span>module: lastUpdated (automatic)</span>
+            </label>
+            <input class="aw-input" type="text" id="modLastUpdated" readonly />
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button id="saveBtn" class="aw-btn aw-btn-primary" type="submit">
+              Publish Changes
+            </button>
+            <a href="/api/message" target="_blank" class="aw-btn aw-btn-outline" style="text-decoration: none;">
+              Open /api/message ↗
+            </a>
+          </div>
+        </form>
+
+        <!-- Live Endpoint Payload Preview -->
+        <div class="aw-code-box">
+          <div class="aw-code-header">
+            <span>GET /api/message — Live JSON Output</span>
+            <span id="syncStatus">Synced</span>
+          </div>
+          <pre id="jsonPreview">{}</pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // State
+    let sessionCreds = { username: '', password: '' };
+
+    // DOM Elements
+    const htmlEl = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loginSection = document.getElementById('loginSection');
+    const dashboardSection = document.getElementById('dashboardSection');
+    const loginForm = document.getElementById('loginForm');
+    const controlForm = document.getElementById('controlForm');
+    const loginAlert = document.getElementById('loginAlert');
+    const dashAlert = document.getElementById('dashAlert');
+
+    const modTitle = document.getElementById('modTitle');
+    const modAuthor = document.getElementById('modAuthor');
+    const modMessage = document.getElementById('modMessage');
+    const modLastUpdated = document.getElementById('modLastUpdated');
+    const jsonPreview = document.getElementById('jsonPreview');
+    const activeUserBadge = document.getElementById('activeUserBadge');
+
+    // Theme Switcher
+    themeToggle.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      themeToggle.textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+    });
+
+    function showAlert(el, msg, type = 'error') {
+      el.textContent = msg;
+      el.className = `aw-alert show ${type === 'success' ? 'aw-alert-success' : 'aw-alert-error'}`;
+    }
+
+    function hideAlert(el) {
+      el.className = 'aw-alert';
+    }
+
+    function populateModules(data) {
+      modTitle.value = data.title || '';
+      modAuthor.value = data.author || '';
+      modMessage.value = data.message || '';
+      modLastUpdated.value = data.lastUpdated || new Date().toISOString();
+      jsonPreview.textContent = JSON.stringify(data, null, 2);
+    }
+
+    // 1. Login Handler -> POST /api/adminLogin
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert(loginAlert);
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const submitBtn = document.getElementById('loginSubmit');
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Verifying...';
+
+      try {
+        const res = await fetch('/api/adminLogin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const result = await res.json();
+
+        if (result === false || !result) {
+          showAlert(loginAlert, 'Invalid username or access key.', 'error');
+        } else {
+          sessionCreds = { username, password };
+          activeUserBadge.textContent = `Admin: ${username}`;
+          populateModules(result);
+
+          loginSection.classList.add('hidden');
+          dashboardSection.classList.remove('hidden');
+          logoutBtn.classList.remove('hidden');
+        }
+      } catch (err) {
+        showAlert(loginAlert, 'Network error communicating with /api/adminLogin.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Authenticate';
+      }
+    });
+
+    // 2. Update Modules Handler -> POST /api/adminControl
+    controlForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert(dashAlert);
+
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Updating...';
+
+      const payload = {
+        username: sessionCreds.username,
+        password: sessionCreds.password,
+        title: modTitle.value.trim(),
+        author: modAuthor.value.trim(),
+        message: modMessage.value
+      };
+
+      try {
+        const res = await fetch('/api/adminControl', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+
+        if (result === false || !result) {
+          showAlert(dashAlert, 'Authorization failed. Please sign in again.', 'error');
+        } else {
+          populateModules(result);
+          showAlert(dashAlert, 'Modules updated and published to /api/message.', 'success');
+        }
+      } catch (err) {
+        showAlert(dashAlert, 'Failed to update modules via /api/adminControl.', 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Publish Changes';
+      }
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      sessionCreds = { username: '', password: '' };
+      loginForm.reset();
+      hideAlert(loginAlert);
+      hideAlert(dashAlert);
+      dashboardSection.classList.add('hidden');
+      logoutBtn.classList.add('hidden');
+      loginSection.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
